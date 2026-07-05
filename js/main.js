@@ -103,8 +103,9 @@ const devisForm = document.getElementById('devisForm');
 const devisError = document.getElementById('devisError');
 devisForm.addEventListener('submit', (e) => {
   e.preventDefault();
-  const honeypot = devisForm.querySelector('[name="bot-field"]');
-  if (honeypot && honeypot.value) return; // spam bot: silently ignore
+  // Netlify already filters spam server-side via data-netlify-honeypot="bot-field" —
+  // no client-side check here, since browser autofill/password managers can populate
+  // hidden fields and would otherwise silently kill legitimate submissions.
 
   const submitBtn = devisForm.querySelector('button[type="submit"]');
   const originalLabel = submitBtn.textContent;
@@ -131,8 +132,9 @@ const contactForm = document.getElementById('contactForm');
 const contactError = document.getElementById('contactError');
 contactForm.addEventListener('submit', (e) => {
   e.preventDefault();
-  const honeypot = contactForm.querySelector('[name="bot-field"]');
-  if (honeypot && honeypot.value) return; // spam bot: silently ignore
+  // Netlify already filters spam server-side via data-netlify-honeypot="bot-field" —
+  // no client-side check here, since browser autofill/password managers can populate
+  // hidden fields and would otherwise silently kill legitimate submissions.
 
   const btn = contactForm.querySelector('button');
   const originalLabel = btn.textContent;
