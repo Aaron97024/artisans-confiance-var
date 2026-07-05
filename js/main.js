@@ -114,11 +114,12 @@ devisForm.addEventListener('submit', (e) => {
 
   submitNetlifyForm(devisForm)
     .then((response) => {
-      if (!response.ok) throw new Error('Réponse serveur invalide');
+      if (!response.ok) throw new Error('Netlify form submission failed with status ' + response.status);
       devisForm.style.display = 'none';
       document.getElementById('formSuccess').classList.add('show');
     })
-    .catch(() => {
+    .catch((err) => {
+      console.error('[devis form]', err);
       submitBtn.disabled = false;
       submitBtn.textContent = originalLabel;
       if (devisError) { devisError.hidden = false; devisError.classList.add('show'); }
@@ -141,12 +142,13 @@ contactForm.addEventListener('submit', (e) => {
 
   submitNetlifyForm(contactForm)
     .then((response) => {
-      if (!response.ok) throw new Error('Réponse serveur invalide');
+      if (!response.ok) throw new Error('Netlify form submission failed with status ' + response.status);
       btn.textContent = 'Message envoyé ✓';
       contactForm.reset();
       setTimeout(() => { btn.textContent = originalLabel; btn.disabled = false; }, 3000);
     })
-    .catch(() => {
+    .catch((err) => {
+      console.error('[contact form]', err);
       btn.disabled = false;
       btn.textContent = originalLabel;
       if (contactError) { contactError.hidden = false; contactError.classList.add('show'); }
