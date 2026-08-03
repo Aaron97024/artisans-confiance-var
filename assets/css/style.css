@@ -386,6 +386,14 @@
 
   /* ===== Devis form ===== */
   .devis-section{background:var(--white);}
+  .scope-note{
+    display:flex;gap:14px;align-items:flex-start;background:var(--green-50);
+    border:1px solid var(--green-100);border-radius:var(--radius-sm);
+    padding:20px 24px;margin-bottom:40px;
+  }
+  .scope-note svg{width:22px;height:22px;stroke:var(--green-600);flex-shrink:0;margin-top:2px;}
+  .scope-note p{font-size:.92rem;color:var(--navy-soft);line-height:1.55;}
+  .scope-note strong{color:var(--navy);}
   .devis-wrap{display:grid;grid-template-columns:.85fr 1.15fr;gap:60px;align-items:start;}
   .devis-side{background:var(--navy);color:var(--white);border-radius:var(--radius);padding:40px 32px;position:sticky;top:110px;}
   .devis-side h3{color:var(--white);font-size:1.3rem;margin-bottom:16px;}
