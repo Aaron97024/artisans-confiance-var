@@ -404,9 +404,8 @@
       </aside>
 
       <div class="form-card reveal">
-        <form id="devisForm" name="devis" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" enctype="multipart/form-data">
-          <input type="hidden" name="form-name" value="devis">
-          <p hidden><label>Ne remplissez pas ce champ si vous êtes humain : <input name="bot-field" autocomplete="off" tabindex="-1"></label></p>
+        <form id="devisForm" name="devis" method="POST" action="https://formspree.io/f/mqerrjjz" enctype="multipart/form-data">
+          <input type="hidden" name="_subject" value="Nouvelle demande de devis - Artisans Confiance Var">
           <div class="form-row">
             <div class="field"><label for="nom">Nom</label><input id="nom" name="nom" type="text" required placeholder="Votre nom"></div>
             <div class="field"><label for="prenom">Prénom</label><input id="prenom" name="prenom" type="text" required placeholder="Votre prénom"></div>
@@ -529,9 +528,8 @@
         </div>
       </div>
       <div class="form-card reveal">
-        <form id="contactForm" name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
-          <input type="hidden" name="form-name" value="contact">
-          <p hidden><label>Ne remplissez pas ce champ si vous êtes humain : <input name="bot-field" autocomplete="off" tabindex="-1"></label></p>
+        <form id="contactForm" name="contact" method="POST" action="https://formspree.io/f/mqerrjjz">
+          <input type="hidden" name="_subject" value="Nouveau message de contact - Artisans Confiance Var">
           <div class="form-row">
             <div class="field"><label for="c-nom">Nom complet</label><input id="c-nom" name="nom" type="text" required placeholder="Votre nom"></div>
             <div class="field"><label for="c-email">E-mail</label><input id="c-email" name="email" type="email" required placeholder="vous@exemple.fr"></div>

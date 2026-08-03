@@ -130,10 +130,24 @@ document.querySelectorAll('.faq-item').forEach(item => {
   });
 });
 
-// Submit a Netlify-registered form via AJAX (works once deployed on Netlify;
-// on any other host / local server the fetch will fail and the catch below runs).
-function submitNetlifyForm(form) {
-  return fetch('/', { method: 'POST', body: new FormData(form) });
+// Submit a form to Formspree via AJAX and resolve only on a genuine success.
+// Accept: application/json makes Formspree respond with JSON instead of a redirect,
+// and a 200 response can still carry an `errors` array (e.g. bad field), so both
+// the HTTP status and the payload must be checked before treating this as success.
+function submitToFormspree(form) {
+  return fetch(form.action, {
+    method: 'POST',
+    body: new FormData(form),
+    headers: { Accept: 'application/json' }
+  }).then((response) => {
+    return response.json().catch(() => ({})).then((data) => {
+      if (!response.ok || data.errors) {
+        const detail = data.errors ? data.errors.map((er) => er.message).join(', ') : response.status;
+        throw new Error('Formspree submission failed: ' + detail);
+      }
+      return data;
+    });
+  });
 }
 
 // Devis form
@@ -141,9 +155,6 @@ const devisForm = document.getElementById('devisForm');
 const devisError = document.getElementById('devisError');
 devisForm.addEventListener('submit', (e) => {
   e.preventDefault();
-  // Netlify already filters spam server-side via data-netlify-honeypot="bot-field" —
-  // no client-side check here, since browser autofill/password managers can populate
-  // hidden fields and would otherwise silently kill legitimate submissions.
 
   const submitBtn = devisForm.querySelector('button[type="submit"]');
   const originalLabel = submitBtn.textContent;
@@ -151,9 +162,8 @@ devisForm.addEventListener('submit', (e) => {
   submitBtn.textContent = 'Envoi en cours…';
   if (devisError) { devisError.hidden = true; devisError.classList.remove('show'); }
 
-  submitNetlifyForm(devisForm)
-    .then((response) => {
-      if (!response.ok) throw new Error('Netlify form submission failed with status ' + response.status);
+  submitToFormspree(devisForm)
+    .then(() => {
       devisForm.style.display = 'none';
       document.getElementById('formSuccess').classList.add('show');
     })
@@ -170,9 +180,6 @@ const contactForm = document.getElementById('contactForm');
 const contactError = document.getElementById('contactError');
 contactForm.addEventListener('submit', (e) => {
   e.preventDefault();
-  // Netlify already filters spam server-side via data-netlify-honeypot="bot-field" —
-  // no client-side check here, since browser autofill/password managers can populate
-  // hidden fields and would otherwise silently kill legitimate submissions.
 
   const btn = contactForm.querySelector('button');
   const originalLabel = btn.textContent;
@@ -180,9 +187,8 @@ contactForm.addEventListener('submit', (e) => {
   btn.textContent = 'Envoi en cours…';
   if (contactError) { contactError.hidden = true; contactError.classList.remove('show'); }
 
-  submitNetlifyForm(contactForm)
-    .then((response) => {
-      if (!response.ok) throw new Error('Netlify form submission failed with status ' + response.status);
+  submitToFormspree(contactForm)
+    .then(() => {
       btn.textContent = 'Message envoyé ✓';
       contactForm.reset();
       setTimeout(() => { btn.textContent = originalLabel; btn.disabled = false; }, 3000);
