@@ -52,29 +52,6 @@ const counterIO = new IntersectionObserver((entries) => {
 }, {threshold:.4});
 counters.forEach(c => counterIO.observe(c));
 
-// Testimonial carousel
-const track = document.getElementById('carousel-track');
-const slides = track.children.length;
-const dotsWrap = document.getElementById('carousel-dots');
-let current = 0;
-for(let i=0;i<slides;i++){
-  const d = document.createElement('span');
-  if(i===0) d.classList.add('active');
-  d.addEventListener('click', () => goTo(i));
-  dotsWrap.appendChild(d);
-}
-function goTo(i){
-  current = (i + slides) % slides;
-  track.style.transform = `translateX(-${current*100}%)`;
-  [...dotsWrap.children].forEach((d,idx)=>d.classList.toggle('active', idx===current));
-}
-document.getElementById('prevBtn').addEventListener('click', () => goTo(current-1));
-document.getElementById('nextBtn').addEventListener('click', () => goTo(current+1));
-let autoplay = setInterval(() => goTo(current+1), 6000);
-[document.getElementById('prevBtn'), document.getElementById('nextBtn')].forEach(b=>{
-  b.addEventListener('click', () => { clearInterval(autoplay); autoplay = setInterval(() => goTo(current+1), 6000); });
-});
-
 // Réalisations gallery lightbox
 const galleryItems = document.querySelectorAll('.gallery-item');
 const lightbox = document.getElementById('lightbox');
