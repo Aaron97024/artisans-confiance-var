@@ -75,6 +75,44 @@ let autoplay = setInterval(() => goTo(current+1), 6000);
   b.addEventListener('click', () => { clearInterval(autoplay); autoplay = setInterval(() => goTo(current+1), 6000); });
 });
 
+// Réalisations gallery lightbox
+const galleryItems = document.querySelectorAll('.gallery-item');
+const lightbox = document.getElementById('lightbox');
+if (lightbox && galleryItems.length) {
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxCaption = document.getElementById('lightboxCaption');
+  let galleryIndex = 0;
+
+  function openLightbox(i) {
+    galleryIndex = (i + galleryItems.length) % galleryItems.length;
+    const item = galleryItems[galleryIndex];
+    const img = item.querySelector('img');
+    lightboxImg.src = img.src;
+    lightboxImg.alt = img.alt;
+    lightboxCaption.textContent = item.dataset.caption || '';
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('no-scroll');
+  }
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('no-scroll');
+  }
+
+  galleryItems.forEach((item, i) => item.addEventListener('click', () => openLightbox(i)));
+  document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+  document.getElementById('lightboxPrev').addEventListener('click', () => openLightbox(galleryIndex - 1));
+  document.getElementById('lightboxNext').addEventListener('click', () => openLightbox(galleryIndex + 1));
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') openLightbox(galleryIndex - 1);
+    if (e.key === 'ArrowRight') openLightbox(galleryIndex + 1);
+  });
+}
+
 // FAQ accordion
 document.querySelectorAll('.faq-item').forEach(item => {
   const q = item.querySelector('.faq-q');
